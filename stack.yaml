@@ -1,0 +1,61 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  labels:
+    app: docker-cleaner
+    version: v0.10
+  name: docker-cleaner
+  namespace: docker-cleaner
+spec:
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: docker-cleaner
+  template:
+    metadata:
+      labels:
+        app: docker-cleaner
+    spec:
+      containers:
+        - image: reg.captainjustin.space/docker-cleaner:dev
+          livenessProbe:
+            exec:
+              command:
+                - echo
+                - "OK"
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          readinessProbe:
+            exec:
+              command:
+                - echo
+                - "OK"
+            initialDelaySeconds: 5
+            periodSeconds: 30
+          env:
+            - name: "level"
+              value: "info"
+          imagePullPolicy: Always
+          securityContext:
+            allowPrivilegeEscalation: false
+            privileged: false
+            readOnlyRootFilesystem: true
+            runAsNonRoot: true
+          name: ubuntu-docker
+          resources:
+            limits:
+              cpu: 20m
+              memory: 32Mi
+            requests:
+              cpu: 10m
+              memory: 16Mi
+          volumeMounts:
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+      volumes:
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 1
