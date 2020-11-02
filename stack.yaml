@@ -18,7 +18,7 @@ spec:
         app: docker-cleaner
     spec:
       containers:
-        - image: reg.captainjustin.space/docker-cleaner:dev
+        - image: docker-cleaner:dev
           livenessProbe:
             exec:
               command:
