@@ -18,7 +18,7 @@ spec:
         app: docker-cleaner
     spec:
       containers:
-        - image: docker-cleaner:dev
+        - image: reg.captainjustin.space/docker-cleaner:dev
           livenessProbe:
             exec:
               command:
@@ -36,7 +36,7 @@ spec:
           env:
             - name: "level"
               value: "info"
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           securityContext:
             allowPrivilegeEscalation: false
             privileged: false
